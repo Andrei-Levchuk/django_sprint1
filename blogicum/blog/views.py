@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import HttpResponseNotFound
 
 
 posts = [
@@ -44,7 +45,7 @@ posts = [
     },
 ]
 
-post_dict = {post['id']: post for post in posts}
+post_dict: dict = {post['id']: post for post in posts}
 
 
 def index(request):
@@ -53,9 +54,12 @@ def index(request):
 
 
 def post_detail(request, id):
-    if post := post_dict.get(id):
+    post = post_dict.get(id)
+    if post:
         return render(request, 'blog/detail.html',
                       context={'post': post, 'fullview': True})
+    else:
+        return HttpResponseNotFound('Пост не найден')
 
 
 def category_posts(request, category_slug):
