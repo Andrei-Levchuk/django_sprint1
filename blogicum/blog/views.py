@@ -45,7 +45,7 @@ posts = [
     },
 ]
 
-post_dict: dict = {post['id']: post for post in posts}
+post: dict = {post['id']: post for post in posts}
 
 
 def index(request):
@@ -54,12 +54,12 @@ def index(request):
 
 
 def post_detail(request, id):
-    post = post_dict.get(id)
+    post = posts[id]
     if post:
         return render(request, 'blog/detail.html',
                       context={'post': post, 'fullview': True})
-    else:
-        return HttpResponseNotFound('Пост не найден')
+
+    return HttpResponseNotFound('Пост не найден')
 
 
 def category_posts(request, category_slug):

@@ -6,9 +6,12 @@
   <h1>Лента записей</h1>                        
   {% for post in posts %}
     <hr>
+    <article>
       {% include 'includes/post_card.html' %}
       <p>
         {{ post.text|truncatewords:10|linebreaks }}
       </p>
+      <a href='{% url "blog:post_detail" post.id %}'>Читать полный текст</a>
+    </article>
   {% endfor %}              
 {% endblock %}
