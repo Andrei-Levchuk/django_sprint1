@@ -45,27 +45,21 @@ posts = [
     },
 ]
 
-post: dict = {post['id']: post for post in posts}
+POSTS = {post['id']: post for post in posts}
 
 
 def index(request):
-    context = {'posts': posts[::-1]}
-    return render(request, 'blog/index.html', context=context)
+    return render(request, 'blog/index.html',
+                  {'posts': list(POSTS.values())[::-1]})
 
 
 def post_detail(request, id):
-    post = posts[id]
-    if post:
-        return render(request, 'blog/detail.html',
-                      context={'post': post, 'fullview': True})
-
-    return HttpResponseNotFound('Пост не найден')
+    try:
+        context = {'post': POSTS[id]}
+    except KeyError:
+        return HttpResponseNotFound('Пост не найден')
+    return render(request, 'blog/detail.html', context)
 
 
 def category_posts(request, category_slug):
-    filtered_posts = []
-    for post in posts:
-        if post['category'] == category_slug:
-            filtered_posts.append(post)
-    context = {'posts': filtered_posts, 'category_slug': category_slug}
-    return render(request, 'blog/category.html', context=context)
+    return render(request, 'blog/category.html', {'category': category_slug})
